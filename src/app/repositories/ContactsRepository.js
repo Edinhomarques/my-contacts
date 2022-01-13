@@ -26,6 +26,19 @@ class ContactRepository {
     return new Promise((resolve) => resolve(contacts.find((contact) => contact.id === id)));
   }
 
+  findByEmail(email) {
+    return new Promise((resolve) => resolve(contacts.find((contact) => contact.email === email)));
+  }
+
+  create(contact) {
+    contact.id = v4();
+
+    return new Promise((resolve) => {
+      contacts.push(contact);
+      resolve(contact);
+    });
+  }
+
   delete(id) {
     return new Promise((resolve) => {
       contacts = contacts.filter((contact) => contact.id !== id);
