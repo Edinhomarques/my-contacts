@@ -42,13 +42,29 @@ class CategoryRepository {
     name,
   }) {
     const [row] = await db.query(`
-      UPDATE contacts
+      UPDATE categories
       SET name = $1
       WHERE id = $2
       RETURNING *
     `, [name, id]);
 
     return row;
+  }
+
+  async delete(id) {
+    // Remove FK from contacts
+    await db.query(`
+    UPDATE contacts
+    SET category_id = NULL
+    where category_id = $1
+    `, [id]);
+
+    const deleteOp = await db.query(`
+      DELETE FROM categories
+      WHERE id = $1
+    `, [id]);
+
+    return deleteOp;
   }
 }
 
