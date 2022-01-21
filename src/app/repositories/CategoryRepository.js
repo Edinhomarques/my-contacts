@@ -3,8 +3,16 @@ const db = require('../../database/index');
 class CategoryRepository {
   async findAll(orderBy = 'asc') {
     const direction = orderBy.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
-    const rows = await db.query(`SELECT * FROM CATEGORIES  ORDER BY name ${direction}`);
+    const rows = await db.query(`SELECT * FROM categories  ORDER BY name ${direction}`);
     return rows;
+  }
+
+  async findById(id) {
+    const [row] = await db.query(`
+      SELECT  * FROM categories
+      WHERE id = $1
+    `, [id]);
+    return row;
   }
 
   async findByName(name) {
@@ -26,6 +34,19 @@ class CategoryRepository {
       VALUES($1)
       RETURNING *
     `, [nameLowerCase]);
+
+    return row;
+  }
+
+  async update(id, {
+    name,
+  }) {
+    const [row] = await db.query(`
+      UPDATE contacts
+      SET name = $1
+      WHERE id = $2
+      RETURNING *
+    `, [name, id]);
 
     return row;
   }
