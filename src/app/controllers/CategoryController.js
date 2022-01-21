@@ -7,6 +7,16 @@ class CategoryController {
     return response.json(categories);
   }
 
+  async show(request, response) {
+    // Obter um registro
+    const { id } = request.params;
+    const category = await CategoryRepository.findById(id);
+    if (!category) {
+      return response.status(404).json({ error: 'Category not found' });
+    }
+    return response.json(category);
+  }
+
   async store(request, response) {
     const {
       name,

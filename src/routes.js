@@ -10,8 +10,9 @@ router.get('/contacts/:id', ContactController.show);
 router.put('/contacts/:id', ContactController.update);
 router.delete('/contacts/:id', ContactController.delete);
 
-router.get('/category', CategoryController.index);
-router.post('/category', CategoryController.store);
-router.put('/category/:id', CategoryController.update);
+router.get('/categories', CategoryController.index);
+router.post('/categories', CategoryController.store);
+router.get('/categories/:id', CategoryController.show);
+router.put('/categories/:id', CategoryController.update);
 
 module.exports = router;
