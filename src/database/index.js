@@ -1,11 +1,11 @@
 const { Client } = require('pg');
 
 const client = new Client({
-  host: 'localhost',
-  port: 5432,
-  user: 'root',
-  password: 'root',
-  database: 'mycontacts',
+  host: process.env.PG_HOST || 'localhost',
+  port: process.env.PG_PORT || 5432,
+  user: process.env.PG_USER,
+  password: process.env.PG_PASSWORD,
+  database: process.env.PG_DATABASE,
 });
 
 client.connect();
