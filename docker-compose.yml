@@ -1,0 +1,19 @@
+version: '3.6'
+services:
+  postgres:
+    image: postgres:latest
+    container_name: pg
+    restart: always
+    environment:
+      DATABASE_HOST: ${PG_HOST}
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+      POSTGRES_DB: ${PG_DATABASE}
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./src/database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+
+
+
+  #postgres::latest
