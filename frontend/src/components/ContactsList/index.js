@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Container, Header, ListContainer, Card,
+  Container, Header, ListContainer, Card, InputSearchContainer,
 } from './styles';
 import arrow from '../../assets/images/icons/arrow.svg';
 import edit from '../../assets/images/icons/edit.svg';
@@ -9,6 +9,9 @@ import trash from '../../assets/images/icons/trash.svg';
 export default function ContactsList() {
   return (
     <Container>
+      <InputSearchContainer>
+        <input type="text" placeholder="Search by name..." />
+      </InputSearchContainer>
       <Header>
         <strong>3 Contatos</strong>
         <a href="/">Novo Contato</a>

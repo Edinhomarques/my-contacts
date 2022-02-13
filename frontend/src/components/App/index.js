@@ -1,9 +1,10 @@
 import { ThemeProvider } from 'styled-components';
+import { BrowserRouter } from 'react-router-dom';
 import GlobalStyles from '../../assets/styles/global';
 import defaultTheme from '../../assets/styles/themes/default';
 import Header from '../Header';
 import { Container } from './styles';
-import ContactsList from '../ContactsList';
+import Routes from '../../Routes';
 
 function App() {
   return (
@@ -11,7 +12,9 @@ function App() {
       <GlobalStyles />
       <Container>
         <Header />
-        <ContactsList />
+        <BrowserRouter>
+          <Routes />
+        </BrowserRouter>
       </Container>
     </ThemeProvider>
   );
