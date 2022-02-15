@@ -6,7 +6,6 @@ export default function Header() {
   return (
     <Container>
       <img src={logo} alt="My Contacts Logo" width={201} />
-
     </Container>
   );
 }
