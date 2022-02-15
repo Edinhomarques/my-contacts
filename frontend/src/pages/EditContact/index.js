@@ -1,7 +1,8 @@
 import React from 'react';
+import PagerHeader from '../../components/PageHeader';
 
 export default function EditContact() {
   return (
-    <h1>Edit page</h1>
+    <PagerHeader title="Teste" />
   );
 }
