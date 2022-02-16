@@ -2,6 +2,7 @@ import React from 'react';
 import PagerHeader from '../../components/PageHeader';
 import Input from '../../components/Input';
 import Select from '../../components/Select';
+import Button from '../../components/Button';
 
 export default function NewContact() {
   return (
@@ -15,6 +16,7 @@ export default function NewContact() {
         <option value="123">twitter</option>
         <option value="123">Facebook</option>
       </Select>
+      <Button type="button">Cadastrar</Button>
     </>
   );
 }
