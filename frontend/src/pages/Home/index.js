@@ -4,6 +4,7 @@ import arrow from '../../assets/images/icons/arrow.svg';
 import edit from '../../assets/images/icons/edit.svg';
 import trash from '../../assets/images/icons/trash.svg';
 import Modal from '../../components/Modal';
+import Loader from '../../components/Loader';
 
 import {
   Container, InputSearchContainer, Header, ListContainer, Card,
@@ -12,7 +13,8 @@ import {
 export default function Home() {
   return (
     <Container>
-      <Modal danger />
+      {false && <Modal danger />}
+      {false && <Loader />}
       <InputSearchContainer>
         <input type="text" placeholder="Search by name..." />
       </InputSearchContainer>
