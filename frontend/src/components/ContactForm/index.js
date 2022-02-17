@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Form } from './styles';
+import { Form, ButtonContainer } from './styles';
 
 import Input from '../Input';
 import Select from '../Select';
@@ -29,8 +29,10 @@ export default function ContactForm({ buttonLabel }) {
           <option value="School">School</option>
         </Select>
       </FormGroup>
+      <ButtonContainer>
+        <Button type="submit">{buttonLabel}</Button>
 
-      <Button type="submit">{buttonLabel}</Button>
+      </ButtonContainer>
     </Form>
   );
 }
