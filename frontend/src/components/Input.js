@@ -11,6 +11,7 @@ export default styled.input`
   font-size: 16px;
   border: 2px solid #FFF;
   transition: border-color 0.2s ease-in;
+  appearance: none;
 
   &::placeholder {
     color: ${({ theme }) => theme.colors.gray[200]};
