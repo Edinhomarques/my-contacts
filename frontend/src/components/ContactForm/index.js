@@ -42,7 +42,7 @@ export default function ContactForm({ buttonLabel }) {
   }
 
   return (
-    <Form onSubmit={(e) => handleSubmit(e)}>
+    <Form onSubmit={(e) => handleSubmit(e)} noValidate>
       <FormGroup
         error={getErrorMessageByFieldName('name')}
       >
@@ -58,6 +58,7 @@ export default function ContactForm({ buttonLabel }) {
         error={getErrorMessageByFieldName('email')}
       >
         <Input
+          type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => handleEmailChange(e)}
@@ -67,6 +68,7 @@ export default function ContactForm({ buttonLabel }) {
 
       <FormGroup>
         <Input
+          type="tel"
           placeholder="Phone"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
