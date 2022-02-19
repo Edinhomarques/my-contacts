@@ -46,6 +46,11 @@ export default function ContactForm({ buttonLabel }) {
     }
   }
 
+  function getErrorMessageByFieldName(fieldName) {
+    return errors.find((err) => err.field === fieldName)
+      && errors.find((err) => err.field === fieldName).message;
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
   }
@@ -53,24 +58,24 @@ export default function ContactForm({ buttonLabel }) {
   return (
     <Form onSubmit={(e) => handleSubmit(e)}>
       <FormGroup
-        error={errors.find((err) => err.field === 'name') && errors.find((err) => err.field === 'name').message}
+        error={getErrorMessageByFieldName('name')}
       >
         <Input
           placeholder="Nome"
           value={name}
           onChange={(e) => handleNameChange(e)}
-          error={errors.find((err) => err.field === 'name')}
+          error={getErrorMessageByFieldName('name')}
         />
       </FormGroup>
 
       <FormGroup
-        error={errors.find((err) => err.field === 'email') && errors.find((err) => err.field === 'email').message}
+        error={getErrorMessageByFieldName('email')}
       >
         <Input
           placeholder="Email"
           value={email}
           onChange={(e) => handleEmailChange(e)}
-          error={errors.find((err) => err.field === 'email')}
+          error={getErrorMessageByFieldName('email')}
         />
       </FormGroup>
 
