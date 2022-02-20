@@ -4,7 +4,7 @@ class ContactRepository {
   async findAll(orderBy = 'asc') {
     const direction = orderBy.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
     const rows = await db.query(`
-      SELECT contacts.*, categories.name AS categories_name FROM contacts
+      SELECT contacts.*, categories.name AS category_name FROM contacts
       LEFT JOIN categories  ON categories.id = contacts.category_id
       ORDER BY contacts.name ${direction}`);
     return rows;
@@ -12,7 +12,7 @@ class ContactRepository {
 
   async findById(id) {
     const [row] = await db.query(`
-      SELECT  contacts.*, categories.name AS categories_name FROM contacts
+      SELECT  contacts.*, categories.name AS category_name FROM contacts
       LEFT JOIN categories  ON categories.id = contacts.category_id
       WHERE contacts.id = $1
     `, [id]);
@@ -31,7 +31,7 @@ class ContactRepository {
     name, email, phone, category_id,
   }) {
     const [row] = await db.query(`
-      INSERT INTO contacts(name, email, phone, category_id) 
+      INSERT INTO contacts(name, email, phone, category_id)
       VALUES($1, $2, $3, $4)
       RETURNING *
     `, [name, email, phone, category_id]);
