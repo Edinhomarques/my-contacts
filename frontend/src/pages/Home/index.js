@@ -7,21 +7,26 @@ import Modal from '../../components/Modal';
 import Loader from '../../components/Loader';
 
 import {
-  Container, InputSearchContainer, Header, ListContainer, Card,
+  Container, InputSearchContainer, Header, ListHeader, Card,
 } from './styles';
 
 export default function Home() {
   const [contacts, setContacts] = useState([]);
+  const [orderBy, setOrderBy] = useState('ASC');
 
   useEffect(async () => {
     try {
-      const response = await fetch('http://localhost:3001/contacts');
+      const response = await fetch(`http://localhost:3001/contacts?orderBy=${orderBy}`);
       const responseJson = await response.json();
       setContacts(responseJson);
     } catch (error) {
       throw Error(error);
     }
-  }, []);
+  }, [orderBy]);
+
+  function handleToggleOrderBy() {
+    setOrderBy((prevState) => (prevState === 'ASC' ? 'DESC' : 'ASC'));
+  }
 
   return (
     <Container>
@@ -37,36 +42,35 @@ export default function Home() {
         </strong>
         <Link to="/new">New Contact</Link>
       </Header>
-      <ListContainer>
-        <header>
-          <button type="button">
-            <span>Nome</span>
-            <img src={arrow} alt="Arrow" />
-          </button>
-        </header>
-        {contacts.map((contact) => (
-          <Card key={contact.id}>
-            <div className="info">
-              <div className="contact-name">
-                <strong>{contact.name}</strong>
-                {contact.category_name && <small>{contact.category_name}</small>}
-              </div>
-              <span>{contact.email}</span>
-              <span>{contact.phone}</span>
-            </div>
+      <ListHeader direction={orderBy}>
+        <button type="button" onClick={() => handleToggleOrderBy()}>
+          <span>Nome</span>
+          <img src={arrow} alt="Arrow" />
+        </button>
+      </ListHeader>
 
-            <div className="actions">
-              <Link to={`/edit/${contact.id}`}>
-                <img src={edit} alt="Edit" />
-              </Link>
-              <button type="button">
-                <img src={trash} alt="Delete" />
-              </button>
+      {contacts.map((contact) => (
+        <Card key={contact.id}>
+          <div className="info">
+            <div className="contact-name">
+              <strong>{contact.name}</strong>
+              {contact.category_name && <small>{contact.category_name}</small>}
             </div>
-          </Card>
+            <span>{contact.email}</span>
+            <span>{contact.phone}</span>
+          </div>
 
-        ))}
-      </ListContainer>
+          <div className="actions">
+            <Link to={`/edit/${contact.id}`}>
+              <img src={edit} alt="Edit" />
+            </Link>
+            <button type="button">
+              <img src={trash} alt="Delete" />
+            </button>
+          </div>
+        </Card>
+
+      ))}
     </Container>
   );
 }
