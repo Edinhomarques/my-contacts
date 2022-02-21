@@ -13,6 +13,10 @@ import {
 export default function Home() {
   const [contacts, setContacts] = useState([]);
   const [orderBy, setOrderBy] = useState('ASC');
+  const [searchTerm, setSearchTerm] = useState('');
+  const filteredContacts = contacts.filter((contact) => (
+    contact.name.toLowerCase().includes(searchTerm.toLowerCase())
+  ));
 
   useEffect(async () => {
     try {
@@ -28,28 +32,40 @@ export default function Home() {
     setOrderBy((prevState) => (prevState === 'ASC' ? 'DESC' : 'ASC'));
   }
 
+  function handleChangeSearchTerm(e) {
+    setSearchTerm(e.target.value);
+  }
+
   return (
+
     <Container>
       {false && <Modal danger />}
       {false && <Loader />}
       <InputSearchContainer>
-        <input type="text" placeholder="Search by name..." />
+        <input
+          value={searchTerm}
+          type="text"
+          placeholder="Search by name..."
+          onChange={(e) => handleChangeSearchTerm(e)}
+        />
       </InputSearchContainer>
       <Header>
         <strong>
-          {contacts.length}
-          {contacts.length === 1 ? ' Contact' : ' Contacts'}
+          {filteredContacts.length}
+          {filteredContacts.length === 1 ? ' Contact' : ' Contacts'}
         </strong>
         <Link to="/new">New Contact</Link>
       </Header>
       <ListHeader direction={orderBy}>
+        {filteredContacts.length !== 0 && (
         <button type="button" onClick={() => handleToggleOrderBy()}>
           <span>Nome</span>
           <img src={arrow} alt="Arrow" />
         </button>
+        )}
       </ListHeader>
 
-      {contacts.map((contact) => (
+      {filteredContacts.map((contact) => (
         <Card key={contact.id}>
           <div className="info">
             <div className="contact-name">
