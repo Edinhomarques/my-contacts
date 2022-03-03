@@ -5,7 +5,7 @@ import edit from '../../assets/images/icons/edit.svg';
 import trash from '../../assets/images/icons/trash.svg';
 import Modal from '../../components/Modal';
 import Loader from '../../components/Loader';
-
+import delay from '../../utils/delay';
 import {
   Container, InputSearchContainer, Header, ListHeader, Card,
 } from './styles';
@@ -14,19 +14,29 @@ export default function Home() {
   const [contacts, setContacts] = useState([]);
   const [orderBy, setOrderBy] = useState('ASC');
   const [searchTerm, setSearchTerm] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   const filteredContacts = useMemo(() => contacts.filter((contact) => (
     contact.name.toLowerCase().includes(searchTerm.toLowerCase())
   )), [contacts, searchTerm]);
 
-  useEffect(async () => {
-    try {
-      const response = await fetch(`http://localhost:3001/contacts?orderBy=${orderBy}`);
-      const responseJson = await response.json();
-      setContacts(responseJson);
-    } catch (error) {
-      throw Error(error);
+  useEffect(() => {
+    async function loadContacts() {
+      try {
+        setIsLoading(true);
+        const response = await fetch(`http://localhost:3001/contacts?orderBy=${orderBy}`);
+        const responseJson = await response.json();
+
+        await delay(2000);
+        setContacts(responseJson);
+      } catch (error) {
+        throw Error(error);
+      } finally {
+        setIsLoading(false);
+      }
     }
+
+    loadContacts();
   }, [orderBy]);
 
   function handleToggleOrderBy() {
@@ -41,7 +51,7 @@ export default function Home() {
 
     <Container>
       {false && <Modal danger />}
-      {false && <Loader />}
+      <Loader isLoading={isLoading} />
       <InputSearchContainer>
         <input
           value={searchTerm}
