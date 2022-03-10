@@ -13,7 +13,7 @@ class ContactController {
     const { id } = request.params;
     const contact = await ContactsRepository.findById(id);
     if (!contact) {
-      return response.status(404).json({ error: 'User not found' });
+      return response.status(404).json({ error: 'Contact not found' });
     }
     return response.json(contact);
   }
@@ -37,7 +37,7 @@ class ContactController {
       name, email, phone, category_id,
     });
 
-    return response.json(contact);
+    return response.status(201).json(contact);
   }
 
   async update(request, response) {
