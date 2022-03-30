@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import arrow from '../../assets/images/icons/arrow.svg';
 import edit from '../../assets/images/icons/edit.svg';
 import trash from '../../assets/images/icons/trash.svg';
+import emptyBox from '../../assets/images/empty-box.svg';
 import sad from '../../assets/images/sad.svg';
 import Modal from '../../components/Modal';
 import Loader from '../../components/Loader';
@@ -17,6 +18,7 @@ import {
   ListHeader,
   Card,
   ErrorContainer,
+  EmptyListContainer,
 } from './styles';
 
 import ContactsServices from '../../services/ContactsService';
@@ -68,6 +70,7 @@ export default function Home() {
     <Container>
       {false && <Modal danger />}
       <Loader isLoading={isLoading} />
+      { contacts.length > 0 && (
       <InputSearchContainer>
         <input
           value={searchTerm}
@@ -76,9 +79,20 @@ export default function Home() {
           onChange={(e) => handleChangeSearchTerm(e)}
         />
       </InputSearchContainer>
-      <Header hasError={hasError}>
-        {!hasError
-        && (
+      )}
+
+      <Header justifyContent={
+        // eslint-disable-next-line no-nested-ternary
+        hasError
+          ? 'flex-end'
+          : (
+            contacts.length > 0
+              ? 'space-between'
+              : 'center'
+          )
+}
+      >
+        {(contacts.length > 0 && !hasError) && (
         <strong>
           {filteredContacts.length}
           {filteredContacts.length === 1 ? ' Contact' : ' Contacts'}
@@ -103,36 +117,54 @@ export default function Home() {
         </ErrorContainer>
       )}
 
-      {!hasError
-        && filteredContacts.length !== 0 && (
+      {!hasError && (
         <>
-          <ListHeader direction={orderBy}>
-            <button type="button" onClick={() => handleToggleOrderBy()}>
-              <span>Nome</span>
-              <img src={arrow} alt="Arrow" />
-            </button>
-          </ListHeader>
-          {filteredContacts.map((contact) => (
-            <Card key={contact.id}>
-              <div className="info">
-                <div className="contact-name">
-                  <strong>{contact.name}</strong>
-                  {contact.category_name && <small>{contact.category_name}</small>}
-                </div>
-                <span>{contact.email}</span>
-                <span>{contact.phone}</span>
-              </div>
+          {(contacts.length < 1 && !isLoading) && (
+            <EmptyListContainer>
+              <img src={emptyBox} alt="" />
+              <p>
+                Você ainda não tem nenhum contato cadastrado!
+                Clique no botão
+                {' '}
+                <strong>”Novo contato”</strong>
+                {' '}
+                à cima para cadastrar o seu primeiro!
 
-              <div className="actions">
-                <Link to={`/edit/${contact.id}`}>
-                  <img src={edit} alt="Edit" />
-                </Link>
-                <button type="button">
-                  <img src={trash} alt="Delete" />
+              </p>
+            </EmptyListContainer>
+          )}
+          {filteredContacts.length > 0 && (
+            <>
+              <ListHeader direction={orderBy}>
+                <button type="button" onClick={() => handleToggleOrderBy()}>
+                  <span>Nome</span>
+                  <img src={arrow} alt="Arrow" />
                 </button>
-              </div>
-            </Card>
-          ))}
+              </ListHeader>
+
+              {filteredContacts.map((contact) => (
+                <Card key={contact.id}>
+                  <div className="info">
+                    <div className="contact-name">
+                      <strong>{contact.name}</strong>
+                      {contact.category_name && <small>{contact.category_name}</small>}
+                    </div>
+                    <span>{contact.email}</span>
+                    <span>{contact.phone}</span>
+                  </div>
+
+                  <div className="actions">
+                    <Link to={`/edit/${contact.id}`}>
+                      <img src={edit} alt="Edit" />
+                    </Link>
+                    <button type="button">
+                      <img src={trash} alt="Delete" />
+                    </button>
+                  </div>
+                </Card>
+              ))}
+            </>
+          )}
         </>
       )}
 
