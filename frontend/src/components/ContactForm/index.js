@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Form, ButtonContainer } from './styles';
 
@@ -9,15 +9,40 @@ import Select from '../Select';
 import Button from '../Button';
 import FormGroup from '../FormGroup';
 import useErrors from '../../hooks/useErrors';
+import CategoriesService from '../../services/CategoriesService';
+import Loader from '../Loader';
 
 export default function ContactForm({ buttonLabel }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [category, setCategory] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [categories, setCategories] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const {
-    setError, removeError, getErrorMessageByFieldName, errors,
+    errors,
+    setError,
+    removeError,
+    getErrorMessageByFieldName,
   } = useErrors();
+
+  const loadCategories = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const categoriesList = await CategoriesService.listCategories();
+      setCategories(categoriesList);
+      setIsLoading(false);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadCategories();
+  }, [loadCategories]);
 
   const isFormValid = name && errors.length === 0;
 
@@ -50,56 +75,60 @@ export default function ContactForm({ buttonLabel }) {
   }
 
   return (
-    <Form onSubmit={(e) => handleSubmit(e)} noValidate>
-      <FormGroup
-        error={getErrorMessageByFieldName('name')}
-      >
-        <Input
-          placeholder="Nome *"
-          value={name}
-          onChange={(e) => handleNameChange(e)}
+    <>
+      <Loader isLoading={isLoading} />
+      <Form onSubmit={(e) => handleSubmit(e)} noValidate>
+        <FormGroup
           error={getErrorMessageByFieldName('name')}
-        />
-      </FormGroup>
-
-      <FormGroup
-        error={getErrorMessageByFieldName('email')}
-      >
-        <Input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => handleEmailChange(e)}
-          error={getErrorMessageByFieldName('email')}
-        />
-      </FormGroup>
-
-      <FormGroup>
-        <Input
-          type="tel"
-          placeholder="Phone"
-          value={phone}
-          onChange={(e) => handlePhoneChange(e)}
-          maxLength="15"
-        />
-      </FormGroup>
-      <FormGroup>
-        <Select
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
         >
-          <option value="">category</option>
-          <option value="Instagram">Instagram</option>
-          <option value="Twitter">Twitter</option>
-          <option value="Facebook">Facebook</option>
-          <option value="School">School</option>
-        </Select>
-      </FormGroup>
+          <Input
+            placeholder="Nome *"
+            value={name}
+            onChange={(e) => handleNameChange(e)}
+            error={getErrorMessageByFieldName('name')}
+          />
+        </FormGroup>
 
-      <ButtonContainer>
-        <Button type="submit" disabled={!isFormValid}>{buttonLabel}</Button>
-      </ButtonContainer>
-    </Form>
+        <FormGroup
+          error={getErrorMessageByFieldName('email')}
+        >
+          <Input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => handleEmailChange(e)}
+            error={getErrorMessageByFieldName('email')}
+          />
+        </FormGroup>
+
+        <FormGroup>
+          <Input
+            type="tel"
+            placeholder="Phone"
+            value={phone}
+            onChange={(e) => handlePhoneChange(e)}
+            maxLength="15"
+          />
+        </FormGroup>
+        <FormGroup>
+          <Select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+          >
+            <option value="">Sem categoria</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </Select>
+        </FormGroup>
+
+        <ButtonContainer>
+          <Button type="submit" disabled={!isFormValid}>{buttonLabel}</Button>
+        </ButtonContainer>
+      </Form>
+    </>
   );
 }
 

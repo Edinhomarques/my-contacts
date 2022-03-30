@@ -1,9 +1,8 @@
 const db = require('../../database/index');
 
 class CategoryRepository {
-  async findAll(orderBy = 'asc') {
-    const direction = orderBy.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
-    const rows = await db.query(`SELECT * FROM categories  ORDER BY name ${direction}`);
+  async findAll() {
+    const rows = await db.query('SELECT * FROM categories');
     return rows;
   }
 
@@ -30,7 +29,7 @@ class CategoryRepository {
   }) {
     const nameLowerCase = name.toLowerCase();
     const [row] = await db.query(`
-      INSERT INTO categories(name) 
+      INSERT INTO categories(name)
       VALUES($1)
       RETURNING *
     `, [nameLowerCase]);
