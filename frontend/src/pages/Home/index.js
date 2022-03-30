@@ -6,6 +6,7 @@ import arrow from '../../assets/images/icons/arrow.svg';
 import edit from '../../assets/images/icons/edit.svg';
 import trash from '../../assets/images/icons/trash.svg';
 import emptyBox from '../../assets/images/empty-box.svg';
+import magnifierQuestion from '../../assets/images/magnifier-question.svg';
 import sad from '../../assets/images/sad.svg';
 import Modal from '../../components/Modal';
 import Loader from '../../components/Loader';
@@ -19,6 +20,7 @@ import {
   Card,
   ErrorContainer,
   EmptyListContainer,
+  NotFoundBySearchListContainer,
 } from './styles';
 
 import ContactsServices from '../../services/ContactsService';
@@ -133,37 +135,46 @@ export default function Home() {
               </p>
             </EmptyListContainer>
           )}
+          {contacts.length > 0 && filteredContacts.length < 1 && (
+            <NotFoundBySearchListContainer>
+              <img src={magnifierQuestion} alt="" srcSet="" />
+              <span>
+                Nenhum resultado foi encontrar para
+                <strong>{`"${searchTerm}"`}</strong>
+              </span>
+            </NotFoundBySearchListContainer>
+          )}
           {filteredContacts.length > 0 && (
-            <>
-              <ListHeader direction={orderBy}>
-                <button type="button" onClick={() => handleToggleOrderBy()}>
-                  <span>Nome</span>
-                  <img src={arrow} alt="Arrow" />
-                </button>
-              </ListHeader>
+          <>
+            <ListHeader direction={orderBy}>
+              <button type="button" onClick={() => handleToggleOrderBy()}>
+                <span>Nome</span>
+                <img src={arrow} alt="Arrow" />
+              </button>
+            </ListHeader>
 
-              {filteredContacts.map((contact) => (
-                <Card key={contact.id}>
-                  <div className="info">
-                    <div className="contact-name">
-                      <strong>{contact.name}</strong>
-                      {contact.category_name && <small>{contact.category_name}</small>}
-                    </div>
-                    <span>{contact.email}</span>
-                    <span>{contact.phone}</span>
+            {filteredContacts.map((contact) => (
+              <Card key={contact.id}>
+                <div className="info">
+                  <div className="contact-name">
+                    <strong>{contact.name}</strong>
+                    {contact.category_name && <small>{contact.category_name}</small>}
                   </div>
+                  <span>{contact.email}</span>
+                  <span>{contact.phone}</span>
+                </div>
 
-                  <div className="actions">
-                    <Link to={`/edit/${contact.id}`}>
-                      <img src={edit} alt="Edit" />
-                    </Link>
-                    <button type="button">
-                      <img src={trash} alt="Delete" />
-                    </button>
-                  </div>
-                </Card>
-              ))}
-            </>
+                <div className="actions">
+                  <Link to={`/edit/${contact.id}`}>
+                    <img src={edit} alt="Edit" />
+                  </Link>
+                  <button type="button">
+                    <img src={trash} alt="Delete" />
+                  </button>
+                </div>
+              </Card>
+            ))}
+          </>
           )}
         </>
       )}

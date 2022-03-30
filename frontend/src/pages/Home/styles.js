@@ -156,3 +156,17 @@ export const EmptyListContainer = styled.div`
   }
 
 `;
+
+export const NotFoundBySearchListContainer = styled.div`
+  display: flex;
+  align-items: flex-start;
+  margin-top: 16px;
+  span {
+    word-break: break-word;
+    margin-left: 24px;
+    text-align: center;
+    color:   ${({ theme }) => theme.colors.gray[200]};
+
+  }
+
+`;
