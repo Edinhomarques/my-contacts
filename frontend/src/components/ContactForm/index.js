@@ -32,10 +32,7 @@ export default function ContactForm({ buttonLabel }) {
       const categoriesList = await CategoriesService.listCategories();
       setCategories(categoriesList);
       setIsLoading(false);
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(error);
-    } finally {
+    } catch (error) { } finally {
       setIsLoading(false);
     }
   }, []);
